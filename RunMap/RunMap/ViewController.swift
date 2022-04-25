@@ -31,6 +31,7 @@ class ViewController: UIViewController {
         locationManager?.delegate = self
         locationManager?.requestAlwaysAuthorization()
         locationManager?.allowsBackgroundLocationUpdates = true
+        locationManager?.activityType = .airborne
     }
     
     private func configureMap() {
@@ -64,6 +65,9 @@ class ViewController: UIViewController {
         locationManager?.requestLocation()
         route?.map = nil
         route = GMSPolyline()
+        route?.strokeWidth = 8
+        route?.strokeColor = .green
+        
         routePath = GMSMutablePath()
         route?.map = mapView
         
@@ -94,7 +98,8 @@ extension ViewController: GMSMapViewDelegate {
         }
         
         geoCoder?.reverseGeocodeLocation(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), completionHandler: { places, error in
-            print(places?.last)
+            print(places?.last as Any)
+            print(error as Any)
         })
     }
 }
