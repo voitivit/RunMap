@@ -1,0 +1,6 @@
+framework module Pods_RunMap {
+  umbrella header "Pods-RunMap-umbrella.h"
+
+  export *
+  module * { export * }
+}
