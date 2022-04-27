@@ -12,20 +12,42 @@ import CoreLocation
 class ViewController: UIViewController {
    
     @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var startButton: UIButton!
     let coordinate = CLLocationCoordinate2D(latitude: 37.34033264974476, longitude: -122.06892632102273)
     var marker: GMSMarker?
     var geoCoder: CLGeocoder?
     var route: GMSPolyline?
     var locationManager: CLLocationManager?
     var routePath: GMSMutablePath?
-    
+    var countTap: Int = 1
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        startButton.addTarget(self, action: #selector( multipleTap(sender:)), for: .touchUpInside)
         configureMap()
         configureLocationManager()
     }
     
+    
+    @objc func multipleTap(sender: UIButton) {
+        countTap += 1
+        if countTap % 2 == 0 {
+            locationManager?.requestLocation()
+            startButton.setTitle("Закончить маршрут", for: .normal)
+            route?.map = nil
+            route = GMSPolyline()
+            route?.strokeWidth = 8
+            route?.strokeColor = .green
+            routePath = GMSMutablePath()
+            route?.map = mapView
+            
+            locationManager?.startUpdatingLocation()
+        } else  {
+            route?.map = nil
+            route = nil
+        }
+                
+        
+    }
     private func configureLocationManager() {
         locationManager = CLLocationManager()
         locationManager?.delegate = self
@@ -62,16 +84,19 @@ class ViewController: UIViewController {
     
     
     @IBAction func didTapUpdateLocation(_ sender: UIButton) {
-        locationManager?.requestLocation()
-        route?.map = nil
-        route = GMSPolyline()
-        route?.strokeWidth = 8
-        route?.strokeColor = .green
-        
-        routePath = GMSMutablePath()
-        route?.map = mapView
-        
-        locationManager?.startUpdatingLocation()
+       
+       /*     locationManager?.requestLocation()
+          //  startButton.setTitle("Закончить маршрут", for: .normal)
+            route?.map = nil
+            route = GMSPolyline()
+            route?.strokeWidth = 8
+            route?.strokeColor = .green
+            routePath = GMSMutablePath()
+            route?.map = mapView
+            
+            locationManager?.startUpdatingLocation()
+            
+       */
     }
     
     
